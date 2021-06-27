@@ -19,6 +19,7 @@ return [
     'sidebar_settings_dav' => 'DAV Resources',
     'sidebar_settings_security' => 'Security',
     'sidebar_settings_auditlogs' => 'Audit logs',
+    'sidebar_settings_linkedaccounts' => 'Linked Accounts',
 
     'title_general' => 'General Information',
     'title_i18n' => 'International settings',
@@ -493,6 +494,8 @@ return [
     'storage_account_info' => 'Your account limit is :accountLimit MB. Your current usage is :currentAccountSize MB (about :percentUsage%).',
     'storage_upgrade_notice' => 'Upgrade your account to be able to upload documents and photos.',
     'storage_description' => 'Here you can see all the documents and photos uploaded about your contacts.',
+
+    'linkedaccounts_title' => 'Linked Accounts',
 
     'dav_title' => 'WebDAV',
     'dav_description' => 'Here you can find all settings to use WebDAV resources for CardDAV and CalDAV exports.',

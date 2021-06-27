@@ -77,5 +77,11 @@
       'title' => 'settings.sidebar_settings_security'])
     @endcomponent
 
+    @component('components.sidebar', [
+      'route' => 'settings.linkedaccounts.index',
+      'icon' => 'fa fa-external-link',
+      'title' => 'settings.sidebar_settings_linkedaccounts'])
+    @endcomponent
+
   </ul>
 </div>

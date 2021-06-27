@@ -297,5 +297,9 @@ Route::middleware(['auth', 'verified', 'mfa'])->group(function () {
             Route::post('/settings/security/generate-recovery-codes', 'Settings\\RecoveryCodesController@store');
             Route::post('/settings/security/recovery-codes', 'Settings\\RecoveryCodesController@index');
         });
+
+        Route::name('linkedaccounts.')->group(function () {
+            Route::get('/settings/linkedAccounts', 'Settings\\LinkedAccountsController@index')->name('index');
+        });
     });
 });
