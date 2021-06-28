@@ -175,6 +175,7 @@ return [
         Laravel\Passport\PassportServiceProvider::class,
         Creativeorange\Gravatar\GravatarServiceProvider::class,
         App\Providers\DAVServiceProvider::class,
+        App\Providers\SyncServiceProvider::class,
     ],
 
     /*

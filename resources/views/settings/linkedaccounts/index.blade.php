@@ -37,6 +37,10 @@
 
             <h3>{{ trans('settings.linkedaccounts_title') }}</h3>
 
+            <div class="form-group">
+                <label>{{ trans('Link with Google Account') }}</label>
+                <a href="{{ route('auth.thirdparty.redirect', ['provider' => 'google']) }}">Links</a>
+              </div>
           </div>
         </div>
       </div>

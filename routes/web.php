@@ -3,6 +3,12 @@
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+
+use Google_Client;
+use Google_Service_PeopleService;
+use Laravel\Socialite\Facades\Socialite;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +37,26 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logout', 'Auth\LoginController@logout');
     Route::get('/auth/login-recovery', 'Auth\RecoveryLoginController@get')->name('recovery.login');
     Route::post('/auth/login-recovery', 'Auth\RecoveryLoginController@store');
+
+    Route::name('auth.thirdparty.')
+        ->prefix('/auth/third-party/{provider}')
+        ->group(
+            function () {
+                Route::get('/redirect', function ($provider) {
+                    return Socialite::driver($provider)
+                        ->scopes(['https://www.googleapis.com/auth/contacts.readonly'])
+                        ->with(["access_type" => "offline", "prompt" => "consent select_account"])
+                        ->redirect();
+                })->name('redirect');
+
+                Route::get('/callback', function (Request $request, $provider) {
+                    $user = Socialite::driver($provider)->user();
+                    $request->session()->put('google_access_token', $user->token);
+
+                    return redirect('https://monica.lndo.site/settings/linkedAccounts');
+                })->name('callback');
+            }
+        );
 });
 
 Route::middleware(['auth', '2fa'])->group(function () {
@@ -267,7 +293,7 @@ Route::middleware(['auth', 'verified', 'mfa'])->group(function () {
             Route::get('/settings/subscriptions/archive', 'Settings\\SubscriptionsController@archive')->name('archive');
             Route::post('/settings/subscriptions/archive', 'Settings\\SubscriptionsController@processArchive');
             Route::get('/settings/subscriptions/downgrade/success', 'Settings\\SubscriptionsController@downgradeSuccess')->name('downgrade.success');
-            if (! App::environment('production')) {
+            if (!App::environment('production')) {
                 Route::get('/settings/subscriptions/forceCompletePaymentOnTesting', 'Settings\\SubscriptionsController@forceCompletePaymentOnTesting')->name('forceCompletePaymentOnTesting');
             }
         });
@@ -302,4 +328,26 @@ Route::middleware(['auth', 'verified', 'mfa'])->group(function () {
             Route::get('/settings/linkedAccounts', 'Settings\\LinkedAccountsController@index')->name('index');
         });
     });
+});
+
+Route::get('/sync', function (Request $request, Google_Client $client) {
+    $user = Socialite::driver('google')
+        ->userFromToken($request->session()->get('google_access_token'));
+
+    dump($user);
+
+    $client->setAccessToken($user->token);
+
+    // Get the API client and construct the service object.
+    $service = new Google_Service_PeopleService($client);
+
+    // Print the names for up to 10 connections.
+    $optParams = array(
+        'pageSize' => 1000,
+        'personFields' => 'names,emailAddresses',
+    );
+
+    $results = $service->people_connections->listPeopleConnections('people/me', $optParams);
+
+    dump(collect($results)->pluck('names.0.displayName'));
 });
