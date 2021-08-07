@@ -32,17 +32,27 @@
 
       <div class="col-12 col-sm-9 users-list">
 
-        <div class="br3 ba b--gray-monica bg-white mb4">
-          <div class="pa3 bb b--gray-monica">
-
-            <h3>{{ trans('settings.linkedaccounts_title') }}</h3>
-
-            <div class="form-group">
-                <label>{{ trans('Link with Google Account') }}</label>
-                <a href="{{ route('auth.thirdparty.redirect', ['provider' => 'google']) }}">Links</a>
-              </div>
-          </div>
+        <div class="mb3">
+          <h3 class="f3 fw5">{{ trans('settings.linkedaccounts_title') }}</h3>
+          <p>{{ trans('settings.linkedaccounts_description') }}</p>
         </div>
+
+        <ul class="table br3 ba b--gray-monica bg-white mb4">
+          <li class="table-row">
+            <div class="table-cell">
+              <i class="fa fa-google"></i>
+            </div>
+
+            <div class="table-cell">
+              <h3>{{ trans('Google') }}</h3>
+              <P>{{ trans('Link with Google to sync your contacts') }}</p>
+            </div>
+
+            <div class="table-cell tr">
+              <a class="btn" href="{{ route('auth.thirdparty.redirect', ['provider' => 'google']) }}">Link account</a>
+            </div>
+          </li>
+        </ul>
       </div>
     </div>
   </div>

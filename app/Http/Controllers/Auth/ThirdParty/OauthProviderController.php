@@ -44,6 +44,7 @@ class OauthProviderController extends Controller
             $user = Socialite::driver($provider)->user();
             $request->session()->put('google_access_token', $user->token);
         } catch (InvalidStateException) {
+            //
         }
 
         return redirect('https://monica.lndo.site/settings/linkedAccounts');
